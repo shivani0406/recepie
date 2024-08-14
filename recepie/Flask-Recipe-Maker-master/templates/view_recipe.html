@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+    <title>{{ recipe.name }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #343a40;
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 0.5rem;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1 class="card-title">{{ recipe.name }}</h1>
+            <p class="card-text"><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
+            <p class="card-text"><strong>Instructions:</strong> {{ recipe.instructions }}</p>
+            {% if recipe.image_filename %}
+                <img src="{{ url_for('static', filename='uploads/' + recipe.image_filename) }}" alt="Recipe Image" class="img-fluid">
+            {% endif %}
+            <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">Back to List</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+</html>

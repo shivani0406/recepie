@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+    <title>{% block title %}Recipe Realm{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lora:wght@400;700&family=Open+Sans:wght@300;600&display=swap">
+    <style>
+        body {
+            background: url('path/to/your/background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #343a40;
+            font-family: 'Roboto', sans-serif;
+            margin-top: 20px;
+        }
+        .navbar {
+            background-color: #6c757d !important; /* Grey color with !important */
+            border-radius: 0 0 10px 10px;
+        }
+        .navbar-brand {
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            color: #fff !important; /* White text color with !important */
+        }
+        .navbar-nav {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+        .nav-link {
+            color: #fff !important;
+            font-weight: 600;
+        }
+        .nav-link:hover {
+            color: #f8f9fa !important;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #0056b3, #004085);
+        }
+        .form-control {
+            border-radius: 0.25rem;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .form-control:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40,167,69,0.25);
+        }
+        .navbar-text {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.25rem;
+            color: #fff !important; /* White text color with !important */
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Recipe Realm</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="navbar-text mr-3">Hello, {{ current_user.username }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-danger" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-success" href="{{ url_for('add_recipe') }}">Add Recipe</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-success" href="{{ url_for('register') }}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="hero-content container">
+            <h1>Welcome to Recipe Realm!</h1>
+            <p>Discover, create, and share your favorite recipes.</p>
+        </div>
+    </div>
+
+    <div class="container container-content">
+        <div class="row">
+            {% for recipe in recipes %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if recipe.image_filename %}
+                    <img src="{{ url_for('static', filename='uploads/' + recipe.image_filename) }}" class="card-img-top" alt="Recipe Image">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ recipe.name }}</h5>
+                        <p class="card-text">{{ recipe.ingredients }}</p>
+                        <a href="{{ url_for('view_recipe', id=recipe.id) }}" class="btn btn-primary">View</a>
+                        <a href="{{ url_for('update_recipe', id=recipe.id) }}" class="btn btn-success">Edit</a>
+                        <form action="{{ url_for('delete_recipe', id=recipe.id) }}" method="POST" style="display: inline;">
+                            <input type="hidden" name="confirm" value="true">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this recipe?');">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+</html>

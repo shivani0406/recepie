@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+<head>
+    <title>Recipe Realm</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lora:wght@400;700&family=Open+Sans:wght@300;600&display=swap">
+    <style>
+        body {
+            background: url('path/to/your/background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #343a40;
+            font-family: 'Roboto', sans-serif;
+            margin-top: 20px;
+        }
+        .hero-section {
+            background: url('path/to/your/background-image.jpg') no-repeat center center;
+            background-size: cover;
+            padding: 80px 0;
+            color: #fff;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 0 0 20px 20px;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero-section h1 {
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            font-size: 3.5rem;
+            color: #f8f9fa;
+        }
+        .hero-section p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.5rem;
+            color: #e2e6ea;
+        }
+        .container-content {
+            margin-top: 40px;
+        }
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-body {
+            padding: 1.25rem;
+        }
+        .btn-primary, .btn-success, .btn-danger {
+            border-radius: 20px;
+            font-weight: 600;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+        .text-primary {
+            color: #007bff;
+        }
+        .text-success {
+            color: #28a745;
+        }
+        .text-danger {
+            color: #dc3545;
+        }
+        .text-light {
+            color: #f8f9fa;
+        }
+        .navbar {
+            background-color: white
+            border-radius: 0 0 10px 10px;
+        }
+        .navbar-brand {
+            font-family: 'Lora', serif;
+            font-weight: 700;
+        }
+        .navbar-nav {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+        .nav-link {
+            color: #fff !important;
+            font-weight: 600;
+        }
+        .nav-link:hover {
+            color: #f8f9fa !important;
+        }
+        .form-control {
+            border-radius: 0.25rem;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .form-control:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40,167,69,0.25);
+        }
+        .navbar-text {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.25rem;
+            color: #007bff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Recipe Realm</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="navbar-text mr-3">Hello, {{ current_user.username }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-danger" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-success" href="{{ url_for('add_recipe') }}">Add Recipe</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-success" href="{{ url_for('register') }}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="hero-content container">
+            <h1>Welcome to Recipe Realm!</h1>
+            <p>Discover, create, and share your favorite recipes.</p>
+        </div>
+    </div>
+
+    <div class="container container-content">
+        <div class="row">
+            {% for recipe in recipes %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if recipe.image_filename %}
+                    <img src="{{ url_for('static', filename='uploads/' + recipe.image_filename) }}" class="card-img-top" alt="Recipe Image">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ recipe.name }}</h5>
+                        <p class="card-text">{{ recipe.ingredients }}</p>
+                        <a href="{{ url_for('view_recipe', id=recipe.id) }}" class="btn btn-primary">View</a>
+                        <a href="{{ url_for('update_recipe', id=recipe.id) }}" class="btn btn-success">Edit</a>
+                        <form action="{{ url_for('delete_recipe', id=recipe.id) }}" method="POST" style="display: inline;">
+                            <input type="hidden" name="confirm" value="true">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this recipe?');">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+</html>
